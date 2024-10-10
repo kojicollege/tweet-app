@@ -8,8 +8,10 @@ class CreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     *
+     * @return bool
      */
-    public function authorize(): bool
+    public function authorize()
     {
         return true;
     }
@@ -17,9 +19,9 @@ class CreateRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array
      */
-    public function rules(): array
+    public function rules()
     {
         return [
             'tweet' => 'required|max:140'
@@ -34,6 +36,6 @@ class CreateRequest extends FormRequest
 
     public function tweet(): string
     {
-        return $this->input('tweet');
+    return $this->input('tweet');
     }
 }

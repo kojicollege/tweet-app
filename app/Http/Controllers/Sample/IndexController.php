@@ -9,9 +9,8 @@ class IndexController extends Controller
 {
     public function show()
     {
-        return "Hello";
+        return 'Hello';
     }
-
     public function showId($id)
     {
         return "Hello {$id}";

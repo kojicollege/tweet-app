@@ -14,11 +14,11 @@ class TweetFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
+    public function definition()
     {
         return [
-            'user_id' => 1, // つぶやきを投稿したユーザーのIDをデフォルトで１とする 
-            'content' => $this->faker->realText(50)
+            'user_id' => 1, // つぶやきを投稿したユーザーのIDをデフォルトで1とする
+            'content' => $this->faker->realText(100)
         ];
     }
 }
