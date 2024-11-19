@@ -24,7 +24,7 @@ jobs:
            MYSQL_DATABASE: ${{ env.DB_DATABASE }}
            MYSQL_USER: ${{ env.DB_USERNAME }}
            MYSQL_PASSWORD: ${{ env.DB_PASSWORD }}
-           MYSQL_ALLOW_EMPTY_PASSWORD: 1
+           MYSQL_ROOT_HOST: '%'
          options: >-
            --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
            --health-interval=10s
@@ -49,6 +49,10 @@ jobs:
 
        - name: Set Hostname for MySQL
          run: echo "127.0.0.1 mysql.test" | sudo tee -a /etc/hosts
+
+       - name: Check MySQL Connection
+         run: |
+           mysql -h mysql.test -uroot -proot_password -e "SELECT VERSION();"
 
        - name: Configure Database Permissions
          run: |
