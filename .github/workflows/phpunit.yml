@@ -47,13 +47,6 @@ jobs:
        - name: Install Dependencies
          run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-       - name: Set Hostname for MySQL
-         run: echo "127.0.0.1 mysql.test" | sudo tee -a /etc/hosts
-
-       - name: Check MySQL Connection
-         run: |
-           mysql -h mysql.test -uroot -proot_password -e "SELECT VERSION();"
-
        - name: Configure Database Permissions
          run: |
            mysql -h mysql.test -uroot -proot_password -e "CREATE USER IF NOT EXISTS 'sail'@'%' IDENTIFIED BY 'password'; GRANT ALL PRIVILEGES ON *.* TO 'sail'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
