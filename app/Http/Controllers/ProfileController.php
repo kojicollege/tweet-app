@@ -12,6 +12,7 @@ use Illuminate\View\View;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use App\Http\Requests\UpdatePasswordRequest;
 
 class ProfileController extends Controller
 {
@@ -62,23 +63,10 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function updatePassword(Request $request)
+    public function updatePassword(UpdatePasswordRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'current_password' => ['required', 'current_password'],
-            'password' => ['required', Password::defaults(), 'confirmed'],
-        ]);
-
-        if ($validator->fails()) {
-            throw ValidationException::withMessages([
-                'current_password' => ['The provided password is incorrect.'],
-            ]);
-        }
-
-        $validated = $validator->validated();
-
         $request->user()->update([
-            'password' => Hash::make($validated['password']),
+            'password' => Hash::make($request->validated('password')),
         ]);
 
         return back()->with('status', 'password-updated');
