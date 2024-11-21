@@ -62,8 +62,8 @@ class ProfileController extends Controller
 
     public function updatePassword(Request $request)
     {
-        try {  // エラーハンドリングを追加
-            $validated = $request->validateWithBag('updatePassword', [
+        try {
+            $validated = $request->validate([  // validateWithBag を validate に変更
                 'current_password' => ['required', 'current_password'],
                 'password' => ['required', Password::defaults(), 'confirmed'],
             ]);
