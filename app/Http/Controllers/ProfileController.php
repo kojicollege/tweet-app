@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class ProfileController extends Controller
 {
@@ -62,20 +64,23 @@ class ProfileController extends Controller
 
     public function updatePassword(Request $request)
     {
-        try {
-            $validated = $request->validateWithBag('updatePassword', [
-                'current_password' => ['required', 'current_password'],
-                'password' => ['required', Password::defaults(), 'confirmed'],
-            ]);
+        $validator = Validator::make($request->all(), [
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', Password::defaults(), 'confirmed'],
+        ], [], [], 'updatePassword');
 
-            $request->user()->update([
-                'password' => Hash::make($validated['password']),
-            ]);
-
-            return back()->with('status', 'password-updated');
-        } catch (\Exception $e) {
-            \Log::error('Password update failed: ' . $e->getMessage());
-            throw $e;
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator, 'updatePassword')
+                ->withInput();
         }
+
+        $validated = $validator->validated();
+
+        $request->user()->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return back()->with('status', 'password-updated');
     }
 }
