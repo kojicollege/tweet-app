@@ -64,10 +64,18 @@ class ProfileController extends Controller
 
     public function updatePassword(Request $request)
     {
-        $validated = $request->validate([  // validateWithBag を validate に変更
+        $validator = Validator::make($request->all(), [
             'current_password' => ['required', 'current_password'],
             'password' => ['required', Password::defaults(), 'confirmed'],
-        ]);
+        ], [], [], 'updatePassword');
+
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator, 'updatePassword')
+                ->withInput();
+        }
+
+        $validated = $validator->validated();
 
         $request->user()->update([
             'password' => Hash::make($validated['password']),
