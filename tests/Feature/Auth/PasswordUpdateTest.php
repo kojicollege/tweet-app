@@ -36,16 +36,16 @@ class PasswordUpdateTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this
-            ->actingAs($user)
-            ->from('/profile')
-            ->put('/profile/password', [
-                'current_password' => 'password',
-                'password' => 'new-password',
-                'password_confirmation' => 'new-password',
-            ]);
+        ->actingAs($user)
+        ->from('/profile')
+        ->put('/profile/password', [
+            'current_password' => 'wrong-password',
+            'password' => 'new-password',
+            'password_confirmation' => 'new-password',
+        ]);
 
         $response
-        ->assertSessionHasErrors(['current_password'])
-        ->assertRedirect('/profile');
+            ->assertSessionHasErrors(['current_password'])
+            ->assertRedirect('/profile');
     }
 }

@@ -67,12 +67,12 @@ class ProfileController extends Controller
         $validator = Validator::make($request->all(), [
             'current_password' => ['required', 'current_password'],
             'password' => ['required', Password::defaults(), 'confirmed'],
-        ], [], [], 'updatePassword');
+        ]);
 
         if ($validator->fails()) {
-            return back()
-                ->withErrors($validator, 'updatePassword')
-                ->withInput();
+            throw ValidationException::withMessages([
+                'current_password' => ['The provided password is incorrect.'],
+            ]);
         }
 
         $validated = $validator->validated();
