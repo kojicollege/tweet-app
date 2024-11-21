@@ -39,13 +39,13 @@ class PasswordUpdateTest extends TestCase
         ->actingAs($user)
         ->from('/profile')
         ->put('/profile/password', [
-            'current_password' => 'password',
+            'current_password' => 'wrong-password',
             'password' => 'new-password',
             'password_confirmation' => 'new-password',
         ]);
 
         $response
-            ->assertSessionHasErrors(['current_password'])
+            ->assertSessionHasErrors('current_password')
             ->assertRedirect('/profile');
     }
 }

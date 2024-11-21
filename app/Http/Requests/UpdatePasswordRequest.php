@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\ValidationException;
 
 class UpdatePasswordRequest extends FormRequest
 {
@@ -26,5 +27,16 @@ class UpdatePasswordRequest extends FormRequest
             'current_password' => ['required', 'current_password'],
             'password' => ['required', Password::defaults(), 'confirmed'],
         ];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        if ($validator->errors()->has('current_password')) {
+            throw ValidationException::withMessages([
+                'current_password' => ['The provided password is incorrect.']
+            ])->errorBag('default');  // デフォルトのエラーバッグを使用
+        }
+
+        parent::failedValidation($validator);
     }
 }
