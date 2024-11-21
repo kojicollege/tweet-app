@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,8 +26,8 @@ Route::get('/sample/{id}', [\App\Http\Controllers\Sample\IndexController::class,
 // Tweet
 Route::get('/tweet', \App\Http\Controllers\Tweet\IndexController::class)->name('tweet.index');
 Route::middleware('auth')->group(function () {
-    Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])
-    ->name('password.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])
+        ->name('password.update');
     Route::post('/tweet/create', \App\Http\Controllers\Tweet\CreateController::class)
         ->name('tweet.create');
     Route::get('/tweet/update/{tweetId}', \App\Http\Controllers\Tweet\Update\IndexController::class)->name('tweet.update.index');
